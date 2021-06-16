@@ -1,13 +1,11 @@
 package io.jenkins.plugins.CodeQL;
 
 import hudson.Extension;
-import hudson.FilePath;
 import hudson.Functions;
 import hudson.model.Computer;
 import hudson.model.Node;
 import hudson.model.TaskListener;
 import hudson.remoting.VirtualChannel;
-import hudson.slaves.NodeSpecific;
 import hudson.tools.DownloadFromUrlInstaller;
 import hudson.tools.ToolInstallation;
 import jenkins.MasterToSlaveFileCallable;
@@ -15,7 +13,6 @@ import org.kohsuke.stapler.DataBoundConstructor;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.util.Locale;
 
 public class CodeQLInstaller extends DownloadFromUrlInstaller{
@@ -32,27 +29,6 @@ public class CodeQLInstaller extends DownloadFromUrlInstaller{
         return installable != null ? new CodeQLInstallable(installable) : installable;
     }
 
-    @Override
-    public FilePath performInstallation(ToolInstallation tool, Node node, TaskListener log) throws IOException, InterruptedException {
-        FilePath dir = preferredLocation(tool, node);
-
-        Installable inst = getInstallable();
-        if(inst==null) {
-            log.getLogger().println("Invalid tool ID "+id);
-            return dir;
-        }
-
-        if (inst instanceof NodeSpecific) {
-            inst = (Installable) ((NodeSpecific) inst).forNode(node, log);
-        }
-
-        if (dir.installIfNecessaryFrom(new URL(inst.url), log, "Unpacking " + inst.url + " to " + dir + " on " + node.getDisplayName())) {
-            dir.act(new ChmodRecAPlusX());
-        }
-
-        return dir;
-    }
-
     protected final class CodeQLInstallable extends NodeSpecificInstallable {
 
         public CodeQLInstallable(Installable inst) {
@@ -66,22 +42,19 @@ public class CodeQLInstaller extends DownloadFromUrlInstaller{
 
                 String arch = ((String) computer.getSystemProperties().get("os.name")).toLowerCase(Locale.ENGLISH);
                 if (arch.contains("linux")) {
-                    codeqlCommand = "codeql-linux64.zip";
+                    codeqlCommand = "codeql-bundle-linux64.tar.gz";
                 }
                 if (arch.contains("windows")) {
-                    codeqlCommand = "codeql-win64.zip";
+                    codeqlCommand = "codeql-bundle-win64.tar.gz";
                 }
                 if (arch.contains("mac")) {
-                    codeqlCommand = "codeql-osx64.zip";
+                    codeqlCommand = "codeql-bundle-osx64.tar.gz";
                 }
-
 
             url += codeqlCommand;
             return this;
         }
     }
-
-
 
     @Extension
     public static final class DescriptorImpl extends DownloadFromUrlInstaller.DescriptorImpl<CodeQLInstaller> {
@@ -94,7 +67,6 @@ public class CodeQLInstaller extends DownloadFromUrlInstaller{
         public boolean isApplicable(Class<? extends ToolInstallation> toolType) {
             return toolType == CodeQLToolInstallation.class;
         }
-
     }
 
     static class ChmodRecAPlusX extends MasterToSlaveFileCallable<Void> {

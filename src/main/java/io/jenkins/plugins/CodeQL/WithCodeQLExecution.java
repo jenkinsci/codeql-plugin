@@ -57,8 +57,8 @@ public class WithCodeQLExecution extends StepExecution {
         codeQLRunnerHome = obtainCodeQLRunnerExec();
 
         HashMap<String,String> overrides = new HashMap<String,String>();
-        overrides.put("PATH+CODEQL", codeQLRunnerHome + "/codeql/");
-        overrides.put("CODEQL_CLI_HOME", codeQLRunnerHome + "/codeql/");
+        overrides.put("PATH+CODEQL", codeQLRunnerHome);
+        overrides.put("CODEQL_CLI_HOME", codeQLRunnerHome);
 
         EnvironmentExpander envEx = EnvironmentExpander.merge(getContext().get(EnvironmentExpander.class), new ExpanderImpl(overrides));
 
