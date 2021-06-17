@@ -8,7 +8,7 @@
 
 ## Introduction
 
-The CodeQL Plugin automatically installs and sets up the CodeQL ClI on a Jenkins agent during a build.
+The CodeQL Plugin automatically installs and sets up the [CodeQL CLI](https://codeql.github.com/docs/codeql-cli/) on a Jenkins agent during a build.
 
 ## Functionality
 
