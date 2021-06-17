@@ -29,7 +29,7 @@ For pipelines, you can use the `tool` step or the `WithCodeql` step as seen belo
 ```
 node {
     stage('Build') {
-        WithCodeql(codeql: 'CodeQL 2.5.5') {
+         withCodeQL(codeql: 'CodeQL 2.5.5') {
             sh 'codeql --version'
         }
     }

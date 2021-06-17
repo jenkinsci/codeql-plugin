@@ -27,7 +27,7 @@ public class WithCodeQLExecution extends StepExecution {
     private static final long serialVersionUID = 1L;
 
     private static final Logger LOGGER = Logger.getLogger(WithCodeQLExecution.class.getName());
-    private final transient WithCodeql step;
+    private final transient WithCodeQL step;
     private final transient Launcher launcher;
     private final transient TaskListener listener;
     private final transient EnvVars env;
@@ -42,7 +42,7 @@ public class WithCodeQLExecution extends StepExecution {
     private transient PrintStream console;
 
     @SuppressFBWarnings(value = "SE_TRANSIENT_FIELD_NOT_RESTORED", justification = "Contextual fields used only in start(); no onResume needed")
-    public WithCodeQLExecution(StepContext context, WithCodeql step)  throws Exception {
+    public WithCodeQLExecution(StepContext context, WithCodeQL step)  throws Exception {
 
         super(context);
         this.step = step;

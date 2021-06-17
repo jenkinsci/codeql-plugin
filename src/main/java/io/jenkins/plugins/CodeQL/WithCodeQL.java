@@ -21,12 +21,12 @@ import org.kohsuke.stapler.DataBoundSetter;
 
 import java.util.Set;
 
-public class WithCodeql extends Step {
+public class WithCodeQL extends Step {
 
     private String codeql;
 
     @DataBoundConstructor
-    public WithCodeql(String codeql) {
+    public WithCodeQL(String codeql) {
         this.codeql = codeql;
     }
 
@@ -50,7 +50,7 @@ public class WithCodeql extends Step {
 
         @Override
         public String getFunctionName() {
-            return "WithCodeql";
+            return "withCodeQL";
         }
 
         @Override
