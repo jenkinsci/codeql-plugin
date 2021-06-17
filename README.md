@@ -41,10 +41,6 @@ node {
 
 Refer to our [contribution guidelines](https://github.com/jenkinsci/.github/blob/master/CONTRIBUTING.md)
 
-## Changelog
-
-See [CHANGELOG.md](CHANGELOG.md]).
-
 ## LICENSE
 
 Licensed under MIT, see [LICENSE](LICENSE.md)
