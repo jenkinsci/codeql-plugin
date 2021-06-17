@@ -20,8 +20,11 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.logging.Logger;
 import java.util.logging.Level;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public class WithCodeQLExecution extends StepExecution {
+
+    private static final long serialVersionUID = 1L;
 
     private static final Logger LOGGER = Logger.getLogger(WithCodeQLExecution.class.getName());
     private final transient WithCodeql step;
@@ -29,8 +32,6 @@ public class WithCodeQLExecution extends StepExecution {
     private final transient TaskListener listener;
     private final transient EnvVars env;
     private transient Computer computer;
-    private transient EnvVars envOverride;
-    private transient String codeQLExecPath;
     private transient String codeQLRunnerHome;
 
     /**
@@ -40,6 +41,7 @@ public class WithCodeQLExecution extends StepExecution {
 
     private transient PrintStream console;
 
+    @SuppressFBWarnings(value = "SE_TRANSIENT_FIELD_NOT_RESTORED", justification = "Contextual fields used only in start(); no onResume needed")
     public WithCodeQLExecution(StepContext context, WithCodeql step)  throws Exception {
 
         super(context);
@@ -51,7 +53,6 @@ public class WithCodeQLExecution extends StepExecution {
 
     @Override
     public boolean start() throws IOException, InterruptedException {
-        envOverride = new EnvVars();
 
         console = listener.getLogger();
         codeQLRunnerHome = obtainCodeQLRunnerExec();
@@ -100,12 +101,12 @@ public class WithCodeQLExecution extends StepExecution {
         String codeQLInstallationName = step.getCodeql();
         LOGGER.log(Level.FINE, "Setting up codeql: {0}", codeQLInstallationName);
 
-        StringBuilder consoleMessage = new StringBuilder("[withCodeQL]");
         String codeQLExecPath = "";
+        withContainer = detectWithContainer();
 
         if (StringUtils.isEmpty(codeQLInstallationName)) {
             // no maven installation name is passed, we will search for the CodeQL installation on the agent
-            consoleMessage.append("No CodeQL Installation installation specified!");
+            console.println("[withCodeQL]  No CodeQL Installation installation specified!");
         } else if (withContainer) {
             console.println(
                     "[withCodeQL] WARNING: Specified CodeQL '" + codeQLInstallationName + "' cannot be installed, will be ignored. " +
@@ -144,6 +145,45 @@ public class WithCodeQLExecution extends StepExecution {
 
     private static CodeQLToolInstallation[] getCodeQLInstallations() {
         return Jenkins.get().getDescriptorByType(CodeQLToolInstallation.DescriptorImpl.class).getInstallations();
+    }
+
+    /**
+     * Detects if this step is running inside <code>docker.image()</code> or <code>container()</code>
+     * <p>
+     * This has the following implications:
+     * <li>Tool installers do no work, as they install in the host, see:
+     * https://issues.jenkins-ci.org/browse/JENKINS-36159
+     * <li>Environment variables do not apply because they belong either to the master or the agent, but not to the
+     * container running the <code>sh</code> command for maven This is due to the fact that <code>docker.image()</code> all it
+     * does is decorate the launcher and execute the command with a <code>docker run</code> which means that the inherited
+     * environment from the OS will be totally different eg: MAVEN_HOME, JAVA_HOME, PATH, etc.
+     * <li>Kubernetes' <code>container()</code> support is still in early stages, and environment variables might not be
+     * completely configured, depending on the version of the Jenkins Kubernetes plugin.
+     *
+     * @return true if running inside a container with <code>docker.image()</code> or <code>container()</code>
+     * @see <a href=
+     * "https://github.com/jenkinsci/docker-workflow-plugin/blob/master/src/main/java/org/jenkinsci/plugins/docker/workflow/WithContainerStep.java">
+     * WithContainerStep</a> and <a href=
+     * "https://github.com/jenkinsci/kubernetes-plugin/blob/master/src/main/java/org/csanchez/jenkins/plugins/kubernetes/pipeline/ContainerStep.java">
+     * ContainerStep</a>
+     */
+    private boolean detectWithContainer() {
+        Launcher launcher1 = launcher;
+        while (launcher1 instanceof Launcher.DecoratedLauncher) {
+            String launcherClassName = launcher1.getClass().getName();
+            if (launcherClassName.contains("org.csanchez.jenkins.plugins.kubernetes.pipeline.ContainerExecDecorator")) {
+                LOGGER.log(Level.FINE, "Step running within Kubernetes withContainer(): {1}", launcherClassName);
+                return false;
+            } if (launcherClassName.contains("WithContainerStep")) {
+                LOGGER.log(Level.FINE, "Step running within docker.image(): {1}", launcherClassName);
+                return true;
+            } else if (launcherClassName.contains("ContainerExecDecorator")) {
+                LOGGER.log(Level.FINE, "Step running within docker.image(): {1}", launcherClassName);
+                return true;
+            }
+            launcher1 = ((Launcher.DecoratedLauncher) launcher1).getInner();
+        }
+        return false;
     }
 
     /**

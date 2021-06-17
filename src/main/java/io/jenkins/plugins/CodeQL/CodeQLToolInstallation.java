@@ -49,8 +49,8 @@ public class CodeQLToolInstallation extends ToolInstallation
 
     @Override
     public void buildEnvVars(EnvVars env) {
-        env.put("PATH+CODEQL", getHome() + "/codeql");
-        env.put("CODEL_RUNNER_HOME", getHome() + "/codeql");
+        env.put("PATH+CODEQL", getHome());
+        env.put("CODEL_CLI_HOME", getHome());
     }
 
     public CodeQLToolInstallation forEnvironment(EnvVars environment) {

@@ -1,4 +1,4 @@
 <?jelly escape-by-default='true'?>
 <div>
-    TODO
+      This plugin installs <a href="https://codeql.github.com/docs/codeql-cli/">CodeQL CLI</a> and allows users to invoke CodeQL CLI commands in a pipeline.
 </div>

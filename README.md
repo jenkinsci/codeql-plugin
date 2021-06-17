@@ -1,4 +1,4 @@
-# codeql
+# CodeQL Plugin
 
 [![Build Status](https://ci.jenkins.io/job/Plugins/job/codeql-plugin/job/master/badge/icon)](https://ci.jenkins.io/job/Plugins/job/codeql-plugin/job/master/)
 [![Contributors](https://img.shields.io/github/contributors/jenkinsci/codeql-plugin.svg)](https://github.com/jenkinsci/codeql-plugin/graphs/contributors)
@@ -8,25 +8,42 @@
 
 ## Introduction
 
-TODO Describe what your plugin does here
+The CodeQL Plugin automatically installs and sets up the CodeQL ClI on a Jenkins agent during a build.
+
+## Functionality
+
+During a build this plugin will:
+* Install a specific version of the CodeQL CLI
+* Add the following environment variables:
+  * `PATH`: The CodeQL CLI home will be added to the `PATH` variable so that the tool will be available during build
+  * `CODEQL_CLI_HOME`: A new environment variable will be added containing the home of the CODEQL_CLI
 
 ## Getting started
 
-TODO Tell users how to configure your plugin here, include screenshots, pipeline examples and 
-configuration-as-code examples.
+* In the Jenkins global tool configuration settings (Manage Jenkins → Global Tool Configuration), find the "CodeQL" section, click "CodeQL Installations…" and "Add CodeQL".
+* Enter a name, e.g. "CodeQL 2.5.5": This will be the name entered in the Pipeline
+* Select "Install automatically" and select the desired CodeQL version from the drop-down list
 
-## Issues
+For pipelines, you can use the `tool` step or the `WithCodeql` step as seen below:
 
-TODO Decide where you're going to host your issues, the default is Jenkins JIRA, but you can also enable GitHub issues,
-If you use GitHub issues there's no need for this section; else add the following line:
+```
+node {
+    stage('Build') {
+        WithCodeql(codeql: 'CodeQL 2.5.5') {
+            sh 'codeql --version'
+        }
+    }
+}
 
-Report issues and enhancements in the [Jenkins issue tracker](https://issues.jenkins-ci.org/).
+```
 
 ## Contributing
 
-TODO review the default [CONTRIBUTING](https://github.com/jenkinsci/.github/blob/master/CONTRIBUTING.md) file and make sure it is appropriate for your plugin, if not then add your own one adapted from the base file
-
 Refer to our [contribution guidelines](https://github.com/jenkinsci/.github/blob/master/CONTRIBUTING.md)
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md]).
 
 ## LICENSE
 

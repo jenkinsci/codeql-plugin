@@ -14,6 +14,7 @@ import org.kohsuke.stapler.DataBoundConstructor;
 import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
+import java.util.Objects;
 
 public class CodeQLInstaller extends DownloadFromUrlInstaller{
 
@@ -39,6 +40,10 @@ public class CodeQLInstaller extends DownloadFromUrlInstaller{
         public NodeSpecificInstallable forNode(Node node, TaskListener log) throws IOException, InterruptedException {
             String codeqlCommand = "" ;
                 Computer computer = node.toComputer();
+
+                if(Objects.isNull(computer))  {
+                    return this;
+                }
 
                 String arch = ((String) computer.getSystemProperties().get("os.name")).toLowerCase(Locale.ENGLISH);
                 if (arch.contains("linux")) {
