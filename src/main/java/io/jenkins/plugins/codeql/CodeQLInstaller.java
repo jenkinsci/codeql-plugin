@@ -73,25 +73,4 @@ public class CodeQLInstaller extends DownloadFromUrlInstaller{
             return toolType == CodeQLToolInstallation.class;
         }
     }
-
-    static class ChmodRecAPlusX extends MasterToSlaveFileCallable<Void> {
-        private static final long serialVersionUID = 1L;
-        public Void invoke(File d, VirtualChannel channel) throws IOException {
-            if(!Functions.isWindows())
-                process(d);
-            return null;
-        }
-        private void process(File f) {
-            if (f.isFile()) {
-                f.setExecutable(true, false);
-            } else {
-                File[] kids = f.listFiles();
-                if (kids != null) {
-                    for (File kid : kids) {
-                        process(kid);
-                    }
-                }
-            }
-        }
-    }
 }
