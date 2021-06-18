@@ -24,7 +24,7 @@ During a build this plugin will:
 * Enter a name, e.g. "CodeQL 2.5.5": This will be the name entered in the Pipeline
 * Select "Install automatically" and select the desired CodeQL version from the drop-down list
 
-For pipelines, you can use the `tool` step or the `WithCodeql` step as seen below:
+For pipelines, you can use the `tool` step or the `withCodeQL` step as seen below:
 
 ```
 node {

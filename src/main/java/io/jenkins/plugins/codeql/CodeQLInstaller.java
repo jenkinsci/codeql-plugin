@@ -1,4 +1,4 @@
-package io.jenkins.plugins.CodeQL;
+package io.jenkins.plugins.codeql;
 
 import hudson.Extension;
 import hudson.Functions;

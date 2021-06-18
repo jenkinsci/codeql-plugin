@@ -1,4 +1,4 @@
-package io.jenkins.plugins.CodeQL;
+package io.jenkins.plugins.codeql;
 import com.google.common.collect.ImmutableSet;
 import hudson.EnvVars;
 import hudson.Extension;
@@ -55,7 +55,7 @@ public class WithCodeQL extends Step {
 
         @Override
         public String getDisplayName() {
-            return "Provide CodeQL environment";
+            return "Provide codeql environment";
         }
 
         @Override

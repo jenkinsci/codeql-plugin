@@ -1,4 +1,4 @@
-package io.jenkins.plugins.CodeQL;
+package io.jenkins.plugins.codeql;
 
 import hudson.*;
 import hudson.model.Computer;
@@ -105,13 +105,13 @@ public class WithCodeQLExecution extends StepExecution {
         withContainer = detectWithContainer();
 
         if (StringUtils.isEmpty(codeQLInstallationName)) {
-            // no maven installation name is passed, we will search for the CodeQL installation on the agent
-            console.println("[withCodeQL]  No CodeQL Installation installation specified!");
+            // no maven installation name is passed, we will search for the codeql installation on the agent
+            console.println("[withCodeQL]  No codeql Installation installation specified!");
         } else if (withContainer) {
             console.println(
-                    "[withCodeQL] WARNING: Specified CodeQL '" + codeQLInstallationName + "' cannot be installed, will be ignored. " +
+                    "[withCodeQL] WARNING: Specified codeql '" + codeQLInstallationName + "' cannot be installed, will be ignored. " +
                             "Step running within a container, tool installations are not available see https://issues.jenkins-ci.org/browse/JENKINS-36159. ");
-            LOGGER.log(Level.FINE, "Running in docker-pipeline, ignore CodeQL Installation parameter: {0}", codeQLInstallationName);
+            LOGGER.log(Level.FINE, "Running in docker-pipeline, ignore codeql Installation parameter: {0}", codeQLInstallationName);
         } else {
             return obtainCodeQLRunnerExecutableFromCodeQLInstallation(codeQLInstallationName);
         }
@@ -126,19 +126,19 @@ public class WithCodeQLExecution extends StepExecution {
         for (CodeQLToolInstallation i : getCodeQLInstallations()) {
             if (codeQLInstallationName.equals(i.getName())) {
                 codeQLInstallation = i;
-                LOGGER.log(Level.FINE, "Found CodeQL installation {0} with installation home {1}", new Object[]{codeQLInstallation.getName(), codeQLInstallation.getHome()});
+                LOGGER.log(Level.FINE, "Found codeql installation {0} with installation home {1}", new Object[]{codeQLInstallation.getName(), codeQLInstallation.getHome()});
                 break;
             }
         }
         if (codeQLInstallation == null) {
-            throw new AbortException("Could not find specified CodeQL installation");
+            throw new AbortException("Could not find specified codeql installation");
         }
         Node node = getComputer().getNode();
         if (node == null) {
             throw new AbortException("Could not obtain the Node for the computer: " + getComputer().getName());
         }
         codeQLInstallation = codeQLInstallation.forNode(node, listener).forEnvironment(env);
-        console.println("[withCodeQL] using CodeQL installation '" + codeQLInstallation.getName() + "'");
+        console.println("[withCodeQL] using codeql installation '" + codeQLInstallation.getName() + "'");
 
         return codeQLInstallation.getHome();
     }
