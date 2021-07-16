@@ -1,6 +1,6 @@
 # CodeQL Plugin
 
-[![Build Status](https://ci.jenkins.io/job/Plugins/job/codeql-plugin/job/master/badge/icon)](https://ci.jenkins.io/job/Plugins/job/codeql-plugin/job/master/)
+[![Build Status](https://ci.jenkins.io/job/Plugins/job/codeql-plugin/job/main/badge/icon)](https://ci.jenkins.io/job/Plugins/job/codeql-plugin/job/master/)
 [![Contributors](https://img.shields.io/github/contributors/jenkinsci/codeql-plugin.svg)](https://github.com/jenkinsci/codeql-plugin/graphs/contributors)
 [![Jenkins Plugin](https://img.shields.io/jenkins/plugin/v/codeql.svg)](https://plugins.jenkins.io/codeql)
 [![GitHub release](https://img.shields.io/github/release/jenkinsci/codeql-plugin.svg?label=changelog)](https://github.com/jenkinsci/codeql-plugin/releases/latest)
