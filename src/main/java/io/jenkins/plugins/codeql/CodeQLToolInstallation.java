@@ -1,6 +1,8 @@
 package io.jenkins.plugins.codeql;
 
-import hudson.*;
+import hudson.CopyOnWrite;
+import hudson.EnvVars;
+import hudson.Extension;
 import hudson.model.EnvironmentSpecific;
 import hudson.model.Node;
 import hudson.model.TaskListener;

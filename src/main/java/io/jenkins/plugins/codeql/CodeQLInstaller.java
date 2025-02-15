@@ -1,17 +1,13 @@
 package io.jenkins.plugins.codeql;
 
 import hudson.Extension;
-import hudson.Functions;
 import hudson.model.Computer;
 import hudson.model.Node;
 import hudson.model.TaskListener;
-import hudson.remoting.VirtualChannel;
 import hudson.tools.DownloadFromUrlInstaller;
 import hudson.tools.ToolInstallation;
-import jenkins.MasterToSlaveFileCallable;
 import org.kohsuke.stapler.DataBoundConstructor;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.Objects;

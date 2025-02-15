@@ -1,12 +1,16 @@
 package io.jenkins.plugins.codeql;
 
-import hudson.*;
+import hudson.AbortException;
+import hudson.EnvVars;
+import hudson.Launcher;
 import hudson.model.Computer;
 import hudson.model.Node;
 import hudson.model.TaskListener;
 
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import jenkins.model.Jenkins;
 import org.apache.commons.lang.StringUtils;
